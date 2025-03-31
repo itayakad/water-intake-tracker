@@ -50,7 +50,13 @@ const Dashboard = () => {
       alert('Please enter a valid amount')
       return
     }
-    addWater(amount)
+
+    // Convert the input amount to ml if user is using imperial units
+    const amountInMl = userData.units === 'imperial' 
+      ? Math.round(amount / 0.033814)  // Convert oz to ml
+      : amount
+
+    addWater(amountInMl)
     setCustomAmount('')
   }
 
@@ -63,6 +69,26 @@ const Dashboard = () => {
   if (!userData) return null
 
   const progress = (currentWaterIntake / dailyWaterIntake) * 100
+
+  const formatAmount = (amount: number) => {
+    if (userData.units === 'metric') {
+      return `${amount}ml`
+    } else {
+      return `${Math.round(amount * 0.033814)}oz`
+    }
+  }
+
+  const getQuickAddAmount = (mlAmount: number) => {
+    if (userData.units === 'metric') {
+      return mlAmount
+    } else {
+      return Math.round(mlAmount * 0.033814)
+    }
+  }
+
+  const getUnitLabel = () => {
+    return userData.units === 'metric' ? 'ml' : 'oz'
+  }
 
   const formatHeight = (height: number, units: 'metric' | 'imperial') => {
     if (units === 'metric') {
@@ -86,13 +112,13 @@ const Dashboard = () => {
         <div className="stats">
           <div className="stat">
             <h3>Daily Goal</h3>
-            <p className="stat-number">{dailyWaterIntake}ml</p>
+            <p className="stat-number">{formatAmount(dailyWaterIntake)}</p>
             <p className="stat-help">Recommended daily water intake</p>
           </div>
 
           <div className="stat">
             <h3>Current Intake</h3>
-            <p className="stat-number">{currentWaterIntake}ml</p>
+            <p className="stat-number">{formatAmount(currentWaterIntake)}</p>
             <p className="stat-help">Water consumed today</p>
           </div>
 
@@ -106,17 +132,17 @@ const Dashboard = () => {
 
           <div className="button-group">
             <button onClick={() => addWater(250)} className="add-button">
-              Add 250ml
+              Add {getQuickAddAmount(250)}{getUnitLabel()}
             </button>
             <button onClick={() => addWater(500)} className="add-button">
-              Add 500ml
+              Add {getQuickAddAmount(500)}{getUnitLabel()}
             </button>
             <div className="custom-input-group">
               <input
                 type="number"
                 value={customAmount}
                 onChange={(e) => setCustomAmount(e.target.value)}
-                placeholder="Custom amount"
+                placeholder={`Custom amount (${getUnitLabel()})`}
                 min="1"
                 className="custom-input"
               />
@@ -129,17 +155,10 @@ const Dashboard = () => {
           <button onClick={resetDaily} className="reset-button">
             Reset Daily Intake
           </button>
-        </div>
-      </div>
 
-      <div className="card">
-        <h2>Your Profile</h2>
-        <div className="profile-info">
-          <p>Height: {formatHeight(userData.height, userData.units)}</p>
-          <p>Weight: {formatWeight(userData.weight, userData.units)}</p>
-          <p>Age: {userData.age}</p>
-          <p>Gender: {userData.gender}</p>
-          <p>Activity Level: {userData.activityLevel}</p>
+          <button onClick={() => navigate('/')} className="back-button">
+            Back to Home
+          </button>
         </div>
       </div>
     </div>

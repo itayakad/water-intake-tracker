@@ -58,7 +58,7 @@ const Quiz = () => {
     localStorage.setItem('dailyWaterIntake', dailyWaterIntake.toString())
     localStorage.setItem('currentWaterIntake', '0')
     
-    navigate('/dashboard')
+    navigate('/')
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
