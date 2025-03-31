@@ -162,6 +162,10 @@
   background-color: rgba(72, 187, 120, 0.05);
 }
 
+.nav-button.exercise:hover {
+  background-color: rgba(236, 201, 75, 0.05);
+}
+
 .home-footer {
   margin-top: 2rem;
   padding: 1rem;

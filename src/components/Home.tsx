@@ -34,6 +34,14 @@ const Home: React.FC = () => {
             <p className="button-description">Keep track of your daily calorie consumption</p>
           </div>
         </button>
+
+        <button onClick={() => navigate('/exercise')} className="nav-button exercise">
+          <div className="button-content">
+            <span className="button-icon">💪</span>
+            <span className="button-text">Exercise Tracker</span>
+            <p className="button-description">Track your weekly exercise progress</p>
+          </div>
+        </button>
       </div>
 
       <footer className="home-footer">

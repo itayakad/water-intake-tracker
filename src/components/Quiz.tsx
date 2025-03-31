@@ -9,6 +9,7 @@ interface UserData {
   gender: 'male' | 'female'
   activityLevel: 'sedentary' | 'light' | 'moderate' | 'very' | 'extra'
   units: 'metric' | 'imperial'
+  weeklyExerciseGoal: number
 }
 
 const Quiz = () => {
@@ -22,6 +23,7 @@ const Quiz = () => {
     gender: 'male',
     activityLevel: 'moderate',
     units: 'metric',
+    weeklyExerciseGoal: 4,
   })
 
   const calculateWaterIntake = (data: UserData): number => {
@@ -224,6 +226,21 @@ const Quiz = () => {
             <option value="very">Very active (hard exercise 6-7 days/week)</option>
             <option value="extra">Extra active (very hard exercise & physical job)</option>
           </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="weeklyExerciseGoal">Weekly Exercise Goal (days)</label>
+          <input
+            type="number"
+            id="weeklyExerciseGoal"
+            name="weeklyExerciseGoal"
+            value={formData.weeklyExerciseGoal}
+            onChange={handleChange}
+            placeholder="Enter your weekly exercise goal (1-7 days)"
+            required
+            min="1"
+            max="7"
+          />
         </div>
 
         <button type="submit" className="submit-button">

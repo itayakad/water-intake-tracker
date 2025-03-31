@@ -9,6 +9,7 @@ interface UserData {
   gender: string;
   activityLevel: string;
   units: 'metric' | 'imperial';
+  weeklyExerciseGoal: number;
 }
 
 const Profile: React.FC = () => {
@@ -69,6 +70,10 @@ const Profile: React.FC = () => {
           <div className="info-group">
             <h3>Units</h3>
             <p>{userData.units}</p>
+          </div>
+          <div className="info-group">
+            <h3>Weekly Exercise Goal</h3>
+            <p>{userData.weeklyExerciseGoal} days</p>
           </div>
         </div>
         <div className="button-group">
