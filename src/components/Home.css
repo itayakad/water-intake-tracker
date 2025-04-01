@@ -68,10 +68,10 @@
 }
 
 .subtitle {
+  text-align: center;
   color: #4a5568;
-  font-size: 1.25rem;
-  margin: 0;
-  opacity: 0.9;
+  margin: 1rem 0 2rem;
+  font-size: 1.125rem;
 }
 
 .nav-buttons {

@@ -1,49 +1,49 @@
 .quiz-container {
   max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
 .header h1 {
-  margin: 0;
+  font-size: 2.5rem;
   color: #2d3748;
-}
-
-.unit-toggle {
-  padding: 0.5rem 1rem;
-  background-color: #edf2f7;
-  color: #4a5568;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.unit-toggle:hover {
-  background-color: #e2e8f0;
-  border-color: #a0aec0;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  flex: 1;
 }
 
 .subtitle {
-  text-align: center;
-  color: #718096;
-  margin-bottom: 2rem;
+  color: #4a5568;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  margin-bottom: 2.5rem;
+  text-align: left;
+  max-width: 100%;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.form-group:first-of-type {
+  margin-top: 2rem;
+}
+
+.form-group:last-of-type {
+  margin-bottom: 2rem;
 }
 
 .form-group label {
@@ -51,64 +51,148 @@
   margin-bottom: 0.5rem;
   color: #4a5568;
   font-weight: 500;
+  font-size: 1rem;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 1rem;
+  color: #2d3748;
+  transition: all 0.2s ease;
+  background-color: #f8fafc;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
   border-color: #4299e1;
-  box-shadow: 0 0 0 1px #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+  background-color: white;
+}
+
+.form-group input::placeholder {
+  color: #a0aec0;
 }
 
 .imperial-height-inputs {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  align-items: center;
 }
 
 .imperial-input-group {
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .imperial-input-group input {
-  width: 100%;
+  flex: 1;
 }
 
 .imperial-input-group span {
   color: #4a5568;
   font-weight: 500;
-  min-width: 2rem;
+  font-size: 1rem;
+  min-width: 1.5rem;
+}
+
+.unit-toggle {
+  padding: 0.625rem 1.25rem;
+  background-color: #ebf8ff;
+  color: #2b6cb0;
+  border: 1px solid #bee3f8;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-top: 0.5rem;
+}
+
+.unit-toggle:hover {
+  background-color: #bee3f8;
+  border-color: #90cdf4;
 }
 
 .submit-button {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem;
   background-color: #4299e1;
   color: white;
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
 }
 
 .submit-button:hover {
   background-color: #3182ce;
+  transform: translateY(-1px);
 }
 
 .submit-button:active {
-  background-color: #2b6cb0;
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .quiz-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .unit-toggle {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .imperial-height-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group:last-of-type {
+    margin-bottom: 1.75rem;
+  }
+}
+
+/* Input number spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 } 

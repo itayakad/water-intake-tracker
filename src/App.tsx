@@ -5,21 +5,53 @@ import CalorieTracker from './components/CalorieTracker'
 import ExerciseTracker from './components/ExerciseTracker'
 import Home from './components/Home'
 import Profile from './components/Profile'
+import Login from './components/Login'
+import Register from './components/Register'
+import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
 import './App.css'
 
 function App() {
   return (
     <Router>
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/water" element={<Dashboard />} />
-          <Route path="/calories" element={<CalorieTracker />} />
-          <Route path="/exercise" element={<ExerciseTracker />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </div>
+      <AuthProvider>
+        <div className="app-container">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } />
+            <Route path="/quiz" element={
+              <ProtectedRoute>
+                <Quiz />
+              </ProtectedRoute>
+            } />
+            <Route path="/water" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/calories" element={
+              <ProtectedRoute>
+                <CalorieTracker />
+              </ProtectedRoute>
+            } />
+            <Route path="/exercise" element={
+              <ProtectedRoute>
+                <ExerciseTracker />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </div>
+      </AuthProvider>
     </Router>
   )
 }

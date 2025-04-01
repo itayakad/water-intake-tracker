@@ -12,18 +12,25 @@ interface UserData {
   weeklyExerciseGoal: number
 }
 
+interface FormDataState extends Omit<UserData, 'height' | 'weight' | 'age' | 'weeklyExerciseGoal'> {
+  height: string
+  weight: string
+  age: string
+  weeklyExerciseGoal: string
+}
+
 const Quiz = () => {
   const navigate = useNavigate()
   const [units, setUnits] = useState<'metric' | 'imperial'>('metric')
-  const [imperialHeight, setImperialHeight] = useState({ feet: 0, inches: 0 })
-  const [formData, setFormData] = useState<UserData>({
-    height: 0,
-    weight: 0,
-    age: 0,
+  const [imperialHeight, setImperialHeight] = useState({ feet: '', inches: '' })
+  const [formData, setFormData] = useState<FormDataState>({
+    height: '',
+    weight: '',
+    age: '',
     gender: 'male',
     activityLevel: 'moderate',
     units: 'metric',
-    weeklyExerciseGoal: 4,
+    weeklyExerciseGoal: '4',
   })
 
   const calculateWaterIntake = (data: UserData): number => {
@@ -50,15 +57,24 @@ const Quiz = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (formData.height <= 0 || formData.weight <= 0 || formData.age <= 0) {
+    const numericData: UserData = {
+      ...formData,
+      height: Number(formData.height),
+      weight: Number(formData.weight),
+      age: Number(formData.age),
+      weeklyExerciseGoal: Number(formData.weeklyExerciseGoal)
+    }
+    
+    if (numericData.height <= 0 || numericData.weight <= 0 || numericData.age <= 0) {
       alert('Please fill in all fields with valid numbers')
       return
     }
 
-    const dailyWaterIntake = calculateWaterIntake(formData)
-    localStorage.setItem('userData', JSON.stringify(formData))
+    const dailyWaterIntake = calculateWaterIntake(numericData)
+    localStorage.setItem('userData', JSON.stringify(numericData))
     localStorage.setItem('dailyWaterIntake', dailyWaterIntake.toString())
     localStorage.setItem('currentWaterIntake', '0')
+    localStorage.setItem('consumedCalories', '0')
     
     navigate('/')
   }
@@ -67,7 +83,7 @@ const Quiz = () => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'gender' || name === 'activityLevel' ? value : Number(value)
+      [name]: name === 'gender' || name === 'activityLevel' ? value : value
     }))
   }
 
@@ -75,48 +91,64 @@ const Quiz = () => {
     const { name, value } = e.target
     const newImperialHeight = {
       ...imperialHeight,
-      [name]: Number(value)
+      [name]: value
     }
     setImperialHeight(newImperialHeight)
     
     // Convert feet and inches to total feet for storage
-    const totalFeet = newImperialHeight.feet + (newImperialHeight.inches / 12)
+    const feet = Number(newImperialHeight.feet) || 0
+    const inches = Number(newImperialHeight.inches) || 0
+    const totalFeet = feet + (inches / 12)
     setFormData(prev => ({
       ...prev,
-      height: totalFeet
+      height: totalFeet.toString()
     }))
   }
 
   const toggleUnits = () => {
     const newUnits = units === 'metric' ? 'imperial' : 'metric'
     setUnits(newUnits)
+    
+    // Convert values only if they're not empty
+    const currentHeight = Number(formData.height) || 0
+    const currentWeight = Number(formData.weight) || 0
+    
     setFormData(prev => ({
       ...prev,
       units: newUnits,
-      // Convert height and weight when switching units
-      height: newUnits === 'metric' ? prev.height * 30.48 : prev.height / 30.48,
-      weight: newUnits === 'metric' ? prev.weight * 0.453592 : prev.weight / 0.453592,
+      height: currentHeight ? 
+        (newUnits === 'metric' ? (currentHeight * 30.48).toString() : (currentHeight / 30.48).toString())
+        : '',
+      weight: currentWeight ?
+        (newUnits === 'metric' ? (currentWeight * 0.453592).toString() : (currentWeight / 0.453592).toString())
+        : ''
     }))
     
     // Update imperial height when switching to imperial units
-    if (newUnits === 'imperial') {
-      const totalFeet = formData.height / 30.48
+    if (newUnits === 'imperial' && currentHeight) {
+      const totalFeet = currentHeight / 30.48
       const feet = Math.floor(totalFeet)
       const inches = Math.round((totalFeet - feet) * 12)
-      setImperialHeight({ feet, inches })
+      setImperialHeight({ 
+        feet: feet.toString(),
+        inches: inches.toString()
+      })
+    } else {
+      setImperialHeight({ feet: '', inches: '' })
     }
   }
 
   return (
     <div className="quiz-container">
       <div className="header">
-        <h1>Water Intake Calculator</h1>
+        <h1>Welcome!</h1>
         <button className="unit-toggle" onClick={toggleUnits}>
           Switch to {units === 'metric' ? 'Imperial' : 'Metric'} Units
         </button>
       </div>
       <p className="subtitle">
-        Let's calculate your daily water needs based on your personal information
+        Let's get started by setting up your profile. This information will help us personalize
+        your water intake, calorie goals, and exercise tracking.
       </p>
       
       <form onSubmit={handleSubmit}>
@@ -180,7 +212,7 @@ const Quiz = () => {
             onChange={handleChange}
             placeholder={`Enter your weight in ${units === 'metric' ? 'kilograms' : 'pounds'}`}
             required
-            step={units === 'metric' ? '0.1' : '0.1'}
+            step="0.1"
           />
         </div>
 
@@ -230,21 +262,25 @@ const Quiz = () => {
 
         <div className="form-group">
           <label htmlFor="weeklyExerciseGoal">Weekly Exercise Goal (days)</label>
-          <input
-            type="number"
+          <select
             id="weeklyExerciseGoal"
             name="weeklyExerciseGoal"
             value={formData.weeklyExerciseGoal}
             onChange={handleChange}
-            placeholder="Enter your weekly exercise goal (1-7 days)"
             required
-            min="1"
-            max="7"
-          />
+          >
+            <option value="1">1 day per week</option>
+            <option value="2">2 days per week</option>
+            <option value="3">3 days per week</option>
+            <option value="4">4 days per week</option>
+            <option value="5">5 days per week</option>
+            <option value="6">6 days per week</option>
+            <option value="7">7 days per week</option>
+          </select>
         </div>
 
         <button type="submit" className="submit-button">
-          Calculate My Water Needs
+          Start My Journey
         </button>
       </form>
     </div>

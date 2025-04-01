@@ -82,4 +82,60 @@
 
 .back-button:hover {
   background-color: #3182ce;
+}
+
+.error-message {
+  background-color: #fed7d7;
+  color: #c53030;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.account-actions {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.logout-button {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: #edf2f7;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #e2e8f0;
+  color: #2d3748;
+}
+
+.delete-account-button {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: transparent;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-account-button:hover {
+  background-color: #fff5f5;
+}
+
+.logout-button:disabled,
+.delete-account-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 } 

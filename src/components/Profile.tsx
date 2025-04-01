@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { deleteUser } from 'firebase/auth';
 import './Profile.css';
 
 interface UserData {
@@ -15,6 +17,9 @@ interface UserData {
 const Profile: React.FC = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { currentUser, logout } = useAuth();
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
@@ -25,6 +30,43 @@ const Profile: React.FC = () => {
     }
     setUserData(JSON.parse(storedUserData));
   }, [navigate]);
+
+  const handleLogout = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      await logout();
+      navigate('/login');
+    } catch (err) {
+      setError('Failed to log out');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!currentUser) return;
+
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete your account? This action cannot be undone.'
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      setError('');
+      setLoading(true);
+      await deleteUser(currentUser);
+      localStorage.clear(); // Clear all local storage data
+      navigate('/register');
+    } catch (err) {
+      setError('Failed to delete account. You may need to re-login first.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formatHeight = (height: number, units: 'metric' | 'imperial') => {
     if (units === 'metric') {
@@ -45,6 +87,7 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <h1>My Profile</h1>
+      {error && <div className="error-message">{error}</div>}
       <div className="card">
         <div className="profile-info">
           <div className="info-group">
@@ -82,6 +125,22 @@ const Profile: React.FC = () => {
           </button>
           <button onClick={() => navigate('/')} className="back-button">
             Back to Home
+          </button>
+        </div>
+        <div className="button-group account-actions">
+          <button 
+            onClick={handleLogout} 
+            disabled={loading} 
+            className="logout-button"
+          >
+            {loading ? 'Logging out...' : 'Log Out'}
+          </button>
+          <button 
+            onClick={handleDeleteAccount} 
+            disabled={loading}
+            className="delete-account-button"
+          >
+            {loading ? 'Deleting...' : 'Delete Account'}
           </button>
         </div>
       </div>
